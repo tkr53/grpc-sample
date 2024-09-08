@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+option go_package = "/grpc";
+
+package user;
+
+service UserService {
+  rpc GetUser (UserRequest) returns (UserResponse);
+  rpc ServerStreamingGetUser (UserRequest) returns (stream UserResponse);
+  rpc ClientStreamingGetUser (stream UserRequest) returns (UserResponse);
+  rpc BidirectionalStreamingGetUser (stream UserRequest) returns (stream UserResponse);
+}
+
+message UserRequest {
+  string id = 1;
+}
+
+message UserResponse {
+  string id = 1;
+  string name = 2;
+  int32 age = 3;
+  string email = 4;
+}
+
+message Sample {
+  // 数値、文字列、真偽値、バイト配列がある
+  int32 id = 1;
+  string name = 2;
+  bool isBool = 3;
+  bytes byteData = 4;
+  // 廃止予定かつ非推奨であるフィールドを明示する
+  string duplicated_field = 5 [deprecated = true];
+  // リスト（配列）
+  repeated string list = 6;
+  // マップ（連想配列）
+  map<string, string> map = 7;
+  // 複数の中からどれかひとつ
+  oneof message {
+      string one = 8;
+      string other = 9;
+  }
+  // 列挙型
+  enum EnumData {
+      UNKNOWN = 0;
+      DATA1 = 1;
+      DATA2 = 2;
+      DATA3 = 3;
+  }
+
+  // 廃番にした番号
+  reserved 10, 11, 12 to 14;
+}
